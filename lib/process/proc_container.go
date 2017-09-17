@@ -132,6 +132,9 @@ func (proc *Proc) Restart() error {
 // Returns an error in case there's any.
 func (proc *Proc) Delete() error {
 	proc.release()
+	return nil
+	//老羊修改， 删除，不再删文件
+	/*
 	err := utils.DeleteFile(proc.Outfile)
 	if err != nil {
 		return err
@@ -141,6 +144,7 @@ func (proc *Proc) Delete() error {
 		return err
 	}
 	return os.RemoveAll(proc.Path)
+	*/
 }
 
 // IsAlive will check if the process is alive or not.

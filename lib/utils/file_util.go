@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
+	"path"
 )
 
 // WriteFile will write the info on array of bytes b to filepath. It will set the file
@@ -17,6 +18,12 @@ func WriteFile(filepath string, b []byte) error {
 // GetFile will open filepath.
 // Returns a tuple with a file and an error in case there's any.
 func GetFile(filepath string) (*os.File, error) {
+	//目录如果不存在，自动创建
+	dir := path.Dir(filepath)
+	if _, err := os.Stat(dir); err!=nil {
+		os.MkdirAll(dir, 0777)
+	}
+
 	return os.OpenFile(filepath, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0777)
 }
 

@@ -101,7 +101,7 @@ func (preparable *Preparable) getBinPath() string {
 }
 
 func (preparable *Preparable) getPidPath() string {
-	return preparable.getBinPath() + ".pid"
+	return preparable.getPath() + "/" + preparable.Name + ".pid"
 }
 
 func (preparable *Preparable) getOutPath() string {
