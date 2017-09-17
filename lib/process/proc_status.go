@@ -5,7 +5,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/struCoder/pidusage"
-	"github.com/struCoder/pmgo/lib/utils"
+	"github.com/jorise7/pmgo/lib/utils"
 )
 
 // ProcStatus is a wrapper with the process current status.

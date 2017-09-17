@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/struCoder/pmgo/lib/process"
+	"github.com/jorise7/pmgo/lib/process"
 )
 
 // ProcPreparable is a preparable with all the necessary informations to run
@@ -77,10 +77,22 @@ func (preparable *Preparable) Identifier() string {
 }
 
 func (preparable *Preparable) getPath() string {
+	/*
+	ppp := path.Base(preparable.SourcePath)
+
+	if ppp[len(ppp)-1] == '/' {
+		ppp = strings.TrimSuffix(ppp, "/")
+	}
+	*/
+
+	return preparable.SourcePath
+	//老羊修改
+	/*
 	if preparable.SysFolder[len(preparable.SysFolder)-1] == '/' {
 		preparable.SysFolder = strings.TrimSuffix(preparable.SysFolder, "/")
 	}
 	return preparable.SysFolder + "/" + preparable.Name
+	*/
 }
 
 func (preparable *Preparable) getBinPath() string {
@@ -92,9 +104,9 @@ func (preparable *Preparable) getPidPath() string {
 }
 
 func (preparable *Preparable) getOutPath() string {
-	return preparable.getBinPath() + ".out"
+	return preparable.getPath() + "/logs/" + ".out.log"
 }
 
 func (preparable *Preparable) getErrPath() string {
-	return preparable.getBinPath() + ".err"
+	return preparable.getPath() + "/logs/" + ".err.log"
 }

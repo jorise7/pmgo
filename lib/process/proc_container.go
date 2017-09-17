@@ -6,7 +6,8 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/struCoder/pmgo/lib/utils"
+	"github.com/jorise7/pmgo/lib/utils"
+	"fmt"
 )
 
 // ProcContainer is a interface that about proc
@@ -57,15 +58,16 @@ type Proc struct {
 func (proc *Proc) Start() error {
 	outFile, err := utils.GetFile(proc.Outfile)
 	if err != nil {
-		return err
+		return errors.New(fmt.Sprintf("%v, name=%v, cmd=%v, path=%v", err.Error(), proc.Name, proc.Cmd, proc.Path))
 	}
 	errFile, err := utils.GetFile(proc.Errfile)
 	if err != nil {
 		return err
 	}
-	wd, _ := os.Getwd()
+	//老羊修改，自定义工作目录
+	//wd, _ := os.Getwd()
 	procAtr := &os.ProcAttr{
-		Dir: wd,
+		Dir: proc.Path,
 		Env: os.Environ(),
 		Files: []*os.File{
 			os.Stdin,

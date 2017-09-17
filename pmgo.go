@@ -26,8 +26,8 @@ package main
 import (
 	"sync"
 
-	"github.com/struCoder/pmgo/lib/cli"
-	"github.com/struCoder/pmgo/lib/master"
+	"github.com/jorise7/pmgo/lib/cli"
+	"github.com/jorise7/pmgo/lib/master"
 	"gopkg.in/alecthomas/kingpin.v2"
 
 	"github.com/sevlyar/go-daemon"
@@ -59,8 +59,8 @@ var (
 	resurrect = app.Command("resurrect", "Resurrect all previously save processes.")
 
 	start           = app.Command("start", "start and daemonize an app.")
-	startSourcePath = start.Arg("start go file", "go file.").Required().String()
 	startName       = start.Arg("name", "Process name.").Required().String()
+	startSourcePath = start.Arg("start go file", "go file.").Required().String()
 	startKeepAlive  = true
 	startArgs       = start.Flag("args", "External args.").Strings()
 
@@ -78,7 +78,7 @@ var (
 	status = app.Command("list", "Get pmgo list.")
 
 	version        = app.Command("version", "get version")
-	currentVersion = "0.5.1"
+	currentVersion = "0.5.1.x"
 
 	info     = app.Command("info", "Describe importance parameters of a process id")
 	infoName = info.Arg("name", "process name").Required().String()
@@ -99,7 +99,9 @@ func main() {
 	case start.FullCommand():
 		checkRemoteMasterServer()
 		cli := cli.InitCli(*dns, timeout)
-		cli.StartGoBin(*startSourcePath, *startName, startKeepAlive, *startArgs)
+		//cli.StartGoBin(*startSourcePath, *startName, startKeepAlive, *startArgs)
+		//老羊修改，不编译，pmgo start name binpath 这样启动
+		cli.StartGoBin(*startName, *startSourcePath, startKeepAlive, *startArgs)
 		cli.Status()
 	case restart.FullCommand():
 		checkRemoteMasterServer()

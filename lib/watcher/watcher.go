@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/struCoder/pmgo/lib/process"
+	"github.com/jorise7/pmgo/lib/process"
 )
 
 // ProcStatus is a wrapper with the process state and an error in case there's any.

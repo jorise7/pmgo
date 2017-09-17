@@ -8,8 +8,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
-	"github.com/struCoder/pmgo/lib/master"
-	"github.com/struCoder/pmgo/lib/utils"
+	"github.com/jorise7/pmgo/lib/master"
+	"github.com/jorise7/pmgo/lib/utils"
 )
 
 // Cli is the command line client.
@@ -38,14 +38,28 @@ func (cli *Cli) Save() {
 	}
 }
 
-// StartGoBin will try to start a go binary process.
+
+
+
+// 老羊修改：添加直接start的方法
 // Returns a fatal error in case there's any.
-func (cli *Cli) StartGoBin(sourcePath string, name string, keepAlive bool, args []string) {
-	err := cli.remoteClient.StartGoBin(sourcePath, name, keepAlive, args)
+func (cli *Cli) Start(name string, path string, keepAlive bool, args []string) {
+	err := cli.remoteClient.Start(name, path, keepAlive, args)
 	if err != nil {
 		log.Fatalf("Failed to start go bin due to: %+v\n", err)
 	}
 }
+
+
+// StartGoBin will try to start a go binary process.
+// Returns a fatal error in case there's any.
+func (cli *Cli) StartGoBin(name string, sourcePath string, keepAlive bool, args []string) {
+	err := cli.remoteClient.StartGoBin(name, sourcePath, keepAlive, args)
+	if err != nil {
+		log.Fatalf("Failed to start go bin due to: %+v\n", err)
+	}
+}
+
 
 // RestartProcess will try to restart a process with procName. Note that this process
 // must have been already started through StartGoBin.

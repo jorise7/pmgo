@@ -27,12 +27,13 @@ import (
 
 	"time"
 
-	"github.com/struCoder/pmgo/lib/preparable"
-	"github.com/struCoder/pmgo/lib/process"
-	"github.com/struCoder/pmgo/lib/utils"
-	"github.com/struCoder/pmgo/lib/watcher"
+	"github.com/jorise7/pmgo/lib/preparable"
+	"github.com/jorise7/pmgo/lib/process"
+	"github.com/jorise7/pmgo/lib/utils"
+	"github.com/jorise7/pmgo/lib/watcher"
 
 	log "github.com/Sirupsen/logrus"
+	"strings"
 )
 
 // Master is the main module that keeps everything in place and execute
@@ -143,6 +144,32 @@ func (master *Master) WatchProcs() {
 			log.Warnf("Could not restart process %s due to %s.", proc.Identifier(), err)
 		}
 	}
+}
+
+
+
+
+// 老羊修改：不编译
+// ready to be executed.
+func (master *Master) PrepareWithoutBuild(name string, sourcePath string, language string, keepAlive bool, args []string) (preparable.ProcPreparable, []byte, error) {
+
+	//运行目录
+	ppp := path.Dir(sourcePath)
+	if ppp[len(ppp)-1] == '/' {
+		ppp = strings.TrimSuffix(ppp, "/")
+	}
+
+	procPreparable := &preparable.Preparable{
+		Name:       name,
+		SourcePath: ppp,
+		Cmd:        sourcePath,
+		SysFolder:  master.SysFolder,
+		Language:   language,
+		KeepAlive:  keepAlive,
+		Args:       args,
+	}
+	//output, err := procPreparable.PrepareBin()
+	return procPreparable, nil, nil
 }
 
 // Prepare will compile the source code into a binary and return a preparable

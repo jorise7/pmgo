@@ -7,7 +7,7 @@ import (
 	"time"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/struCoder/pmgo/lib/process"
+	"github.com/jorise7/pmgo/lib/process"
 )
 
 // RemoteMaster is a struct that holds the master instance.
@@ -27,6 +27,25 @@ type GoBin struct {
 	KeepAlive  bool     // KeepAlive will determine whether pmgo should keep the proc live or not.
 	Args       []string // Args is an array containing all the extra args that will be passed to the binary after compilation.
 }
+
+
+
+// GoBin is a struct that represents the necessary arguments for a go binary to be built.
+type GoStart struct {
+	Name       string   // Name is the process name that will be given to the process.
+	Path string   // 可执行文件路径
+	KeepAlive  bool     // KeepAlive will determine whether pmgo should keep the proc live or not.
+	Args       []string // Args is an array containing all the extra args that will be passed to the binary after compilation.
+}
+
+
+
+
+
+
+
+
+
 
 // ProcDataResponse is a struct than about proc attr
 type ProcDataResponse struct {
@@ -49,6 +68,10 @@ func (remote_master *RemoteMaster) Save(req string, ack *bool) error {
 	return remote_master.master.SaveProcs()
 }
 
+
+
+
+
 // StartGoBin will build a binary based on the arguments passed on goBin, then it will start the process
 // and keep it alive if KeepAlive is set to true.
 // It returns an error and binds true to ack pointer.
@@ -61,10 +84,11 @@ func (remote_master *RemoteMaster) StartGoBin(goBin *GoBin, ack *bool) error {
 	if isExist {
 		return nil
 	}
-	preparable, output, err := remote_master.master.Prepare(goBin.SourcePath, goBin.Name, "go", goBin.KeepAlive, goBin.Args)
+	//preparable, output, err := remote_master.master.Prepare(goBin.SourcePath, goBin.Name, "go", goBin.KeepAlive, goBin.Args)
+	preparable, output, err := remote_master.master.PrepareWithoutBuild(goBin.Name, goBin.SourcePath, "go", goBin.KeepAlive, goBin.Args)
 	*ack = true
 	if err != nil {
-		return fmt.Errorf("ERROR: %s OUTPUT: %s", err, string(output))
+		return fmt.Errorf("ERROR1: %s OUTPUT1: %s", err, string(output))
 	}
 	return remote_master.master.RunPreparable(preparable)
 }
@@ -168,9 +192,28 @@ func (client *RemoteClient) Save() error {
 	return client.conn.Call("RemoteMaster.Save", "", &started)
 }
 
+
+
+// 老羊修改：添加直接启动的方法
+// It returns an error in case there's any.
+func (client *RemoteClient) Start(name string, binpath string, keepAlive bool, args []string) error {
+	var started bool
+	goStart := &GoStart{
+		Name:       name,
+		Path:       binpath,
+		KeepAlive:  keepAlive,
+		Args:       args,
+	}
+
+	return client.conn.Call("RemoteMaster.Start", goStart, &started)
+}
+
+
+
+
 // StartGoBin is a wrapper that calls the remote StartsGoBin.
 // It returns an error in case there's any.
-func (client *RemoteClient) StartGoBin(sourcePath string, name string, keepAlive bool, args []string) error {
+func (client *RemoteClient) StartGoBin(name string, sourcePath string, keepAlive bool, args []string) error {
 	var started bool
 	goBin := &GoBin{
 		SourcePath: sourcePath,
