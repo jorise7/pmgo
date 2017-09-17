@@ -96,7 +96,8 @@ func (preparable *Preparable) getPath() string {
 }
 
 func (preparable *Preparable) getBinPath() string {
-	return preparable.getPath() + "/" + preparable.Name
+	//return preparable.getPath() + "/" + preparable.Name
+	return preparable.Cmd
 }
 
 func (preparable *Preparable) getPidPath() string {
@@ -104,9 +105,9 @@ func (preparable *Preparable) getPidPath() string {
 }
 
 func (preparable *Preparable) getOutPath() string {
-	return preparable.getPath() + "/logs/" + ".out.log"
+	return preparable.getPath() + "/logs/" + preparable.Name + ".out.log"
 }
 
 func (preparable *Preparable) getErrPath() string {
-	return preparable.getPath() + "/logs/" + ".err.log"
+	return preparable.getPath() + "/logs/" + preparable.Name + ".err.log"
 }
